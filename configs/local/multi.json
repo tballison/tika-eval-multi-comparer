@@ -1,0 +1,7 @@
+{
+  "numThreads": 4,
+  "tikaConfig": "/home/tallison/Intellij/tika-eval-multi-comparer/configs/local/tika-config.xml",
+  "fetchEmitterTuples": [
+    {"fetcher" : "icu4j", "emitter": "icu4j"}
+  ]
+}

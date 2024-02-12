@@ -1,0 +1,1 @@
+This is a demo repo for a tika-multi-comparer. This should be treated as ephemeral and might go away.

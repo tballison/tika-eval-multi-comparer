@@ -1,0 +1,73 @@
+<properties>
+  <pipesIterator class="org.apache.tika.pipes.pipesiterator.fs.FileSystemPipesIterator">
+    <params>
+      <fetcherName>fs1</fetcherName>
+      <basePath>/home/tallison/data/cc-html/docs</basePath>
+    </params>
+  </pipesIterator>
+  <emitters>
+    <emitter class="org.apache.tika.pipes.emitter.jdbc.JDBCEmitter">
+      <name>paths</name>
+      <connection>jdbc:h2:/home/tallison/Desktop/tmp2/cc-html-db</connection>
+      <createTable>create table paths
+        (path varchar(512), length long);
+      </createTable>
+      <!-- the jdbc emitter always puts ths emitKey value as the first
+           item -->
+      <insert>insert into paths (path, length) values (?,?);
+      </insert>
+      <!-- these are the keys in the metadata object.
+          The emitKey is added as the first element in the insert statement.
+          Then the these values are added in order.
+          They must be in the order of the insert statement.
+          -->
+      <keys>
+        <key k="length" v="long"/>
+      </keys>
+      <attachmentStrategy>first_only</attachmentStrategy>
+    </emitter>
+    <emitter class="org.apache.tika.pipes.emitter.jdbc.JDBCEmitter">
+      <name>icu4j</name>
+      <connection>jdbc:h2:/home/tallison/Desktop/tmp2/cc-html-db</connection>
+      <createTable>create table icu4j
+        (path varchar(512), mime varchar(64), charset varchar(64),
+        parse_time_ms long, header_lang varchar(12),
+        detected_lang varchar(12), num_common_tokens integer, num_alpha_tokens integer,
+        num_tokens integer, oov float);
+      </createTable>
+      <!-- the jdbc emitter always puts ths emitKey value as the first
+           item -->
+      <insert>insert into icu4j (path, mime, charset, parse_time_ms,
+        header_lang,
+        detected_lang, num_common_tokens, num_alpha_tokens, num_tokens, oov) values (?,?,?,?,?,?,?,?,?,?);
+      </insert>
+      <!-- these are the keys in the metadata object.
+          The emitKey is added as the first element in the insert statement.
+          Then the these values are added in order.
+          They must be in the order of the insert statement.
+          -->
+      <keys>
+        <key k="mime" v="varchar(64)"/>
+        <key k="charset" v="varchar(64)"/>
+        <key k="parse_time_ms" v="long"/>
+        <key k="header_lang" v="varchar(12)"/>
+        <key k="detected_lang" v="varchar(12)"/>
+        <key k="num_common_tokens" v="integer"/>
+        <key k="num_alpha_tokens" v="integer"/>
+        <key k="num_tokens" v="integer"/>
+        <key k="oov" v="float"/>
+      </keys>
+      <attachmentStrategy>first_only</attachmentStrategy>
+    </emitter>
+  </emitters>
+  <fetchers>
+    <fetcher class="org.apache.tika.pipes.fetcher.fs.FileSystemFetcher">
+      <name>paths</name>
+      <basePath>/home/tallison/data/cc-html/docs</basePath>
+    </fetcher>
+    <fetcher class="org.apache.tika.pipes.fetcher.fs.FileSystemFetcher">
+      <name>icu4j</name>
+      <basePath>/home/tallison/data/cc-html/cc-html-icu4j</basePath>
+    </fetcher>
+  </fetchers>
+</properties>
